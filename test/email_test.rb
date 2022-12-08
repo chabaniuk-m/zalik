@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative '../email'
+require_relative '../src/email'
 
 class EmailTest < Minitest::Test
    def setup
@@ -11,9 +11,6 @@ class EmailTest < Minitest::Test
    end
 
    def test
-      @a = Email.new('aaa@gmail.com')
-      @b = Email.new('bbb@gmail.com')
-      @c = Email.new('ccc@gmail.com')
-      self.assert_equal(%w[aaa@gmail.com bbb@gmail.com ccc@gmail.com], @a.all_emails.keys)
+
    end
 end

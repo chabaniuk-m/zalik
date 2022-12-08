@@ -1,3 +1,11 @@
+require_relative 'category'
+
+class EmailError < StandardError
+   def initialize(msg = "Error working with emails")
+      super
+   end
+end
+
 class Email
 
    @@all_emails = {}
@@ -16,10 +24,10 @@ class Email
             @@all_emails[@email] = self
             @spammers = []
          else
-            raise ArgumentError("Please provide a valid email address")
+            raise EmailError("Please provide a valid email address")
          end
       else
-         raise ArgumentError("Email address must be of type String")
+         raise EmailError("Email address must be of type String")
       end
    end
 
@@ -33,13 +41,13 @@ class Email
             if category_name != :sent and category_name != :inbox and @categories.has_key? category_name
                @categories[category_name].push(letter)
             else
-               raise KeyError("there")
+               raise EmailError("there is no category with name #{category_name}")
             end
          else
-            raise TypeError("letter must be of type Letter")
+            raise EmailError("letter must be of type Letter")
          end
       else
-         raise TypeError("Category name must be a Symbol")
+         raise EmailError("Category name must be a Symbol")
       end
    end
 
@@ -51,5 +59,9 @@ class Email
             @categories[:inbox].push(letter)
          end
       end
+   end
+
+   def self.get_all_categories
+      return @@all_emails.keys
    end
 end
