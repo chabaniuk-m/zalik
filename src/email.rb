@@ -73,9 +73,11 @@ class Email
 
    def send_letter(to, title, body, tags, date=DateTime.now)
       if @@all_emails.keys.include? to
-         letter = Letter(@email, to, title, body, tags, date)
+         letter = Letter.new(@email, to, title, body, tags, date)
          @@all_emails[to].receive_letter(letter)
          @categories[:sent].push(letter)
+      else
+         raise EmailError("There is no email with address '#{to}'")
       end
    end
 
@@ -93,5 +95,9 @@ class Email
 
    def self.include?(email_address)
       @@all_emails.include? email_address
+   end
+
+   def include_in?(category_name, letter)
+      @categories[category_name].include?(letter)
    end
 end
