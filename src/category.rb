@@ -19,4 +19,8 @@ class Category
          raise TypeError("Only letters can be added to a category")
       end
    end
+
+   def include?(letter)
+      @letters.include? letter
+   end
 end
