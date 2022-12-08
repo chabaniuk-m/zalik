@@ -48,4 +48,21 @@ class TestZalik < Minitest::Test
     a.create_category('favorite')
     assert_equal([:spam, :inbox, :sent, :favorite], a.get_categories, 'Expected a new category to be added')
   end
+
+  def test_send_and_receive_letter
+    a = Email.find_email('aaa@gmail.com')
+    b = Email.find_email('bbb@gmail.com')
+    if b.is_a? Email and a.is_a? Email
+      begin
+        b.send_letter('non-existing-email@address', 'Hello', 'Would you receive me?', [:none])
+        assert false, "It must be impossible to send email to a non-existing email"
+      rescue
+        assert true
+      end
+      dt = DateTime.now
+      b.send_letter('aaa@gmail.com', 'Party invitation', "Hi, Arnold!\nHow are you? I'd like to invite you to my birthday party...", [:party, :invitation, :friends], dt)
+      assert a.include_in?(:inbox, Letter.new('bbb@gmail.com', 'aaa@gmail.com', 'Party invitation', "Hi, Arnold!\nHow are you? I'd like to invite you to my birthday party...", [:party, :invitation, :friends], dt))
+      assert b.include_in?(:sent, Letter.new('bbb@gmail.com', 'aaa@gmail.com', 'Party invitation', "Hi, Arnold!\nHow are you? I'd like to invite you to my birthday party...", [:party, :invitation, :friends], dt))
+    end
+  end
 end
